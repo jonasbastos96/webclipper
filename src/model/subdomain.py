@@ -15,8 +15,8 @@ class Subdomain:
         self.pages = list()
 
         # Load pages from database
-        self.load_pages()
+        self.loadPages()
 
-    def load_pages(self):
+    def loadPages(self):
         """ Create and load pages objects from database """
         return None
