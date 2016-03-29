@@ -1,10 +1,16 @@
 class Page:
+    """ Show to news the possible pages' structures.
+
+        All attributes are lists of strings containing a valid xpath to
+        certain part of news.
+    """
+
     def __init__(self):
-        url = None
-        head_tag = None
-        text_tag = None
-        subtext_tag = None
-        image_tag = None
-        image_caption_tag = None
-        author_tag = None
-        date_tag = None
+        self.__heading_tag = str()
+        self.__subheading_tag = str()
+        self.__text_tag = str()
+        self.__subtext_tag = str()
+        self.__image_tag = str()
+        self.__image_caption_tag = str()
+        self.__author_tag = str()
+        self.__date_tag = str()
