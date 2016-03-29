@@ -1,7 +1,7 @@
 import datetime
 
 
-class search:
+class Search:
     def __init__(self):
         self.id = int()
         self.term = str()

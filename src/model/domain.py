@@ -1,3 +1,6 @@
+import requests
+
+
 class Domain:
     def __init__(self):
         self.url = str()
@@ -7,3 +10,7 @@ class Domain:
         self.connectionAttempts = int()
         self.connectionHeader = str()
 
+    def obtainSource(self, url: str()):
+        attempts = self.connectionAttempts
+        srcPage = requests.get(url, headers=self.connectionHeader,
+                               timeout=self.connectionTimeout)
