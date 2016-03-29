@@ -6,11 +6,11 @@ class Page:
     """
 
     def __init__(self):
-        self.__heading_tag = str()
-        self.__subheading_tag = str()
-        self.__text_tag = str()
-        self.__subtext_tag = str()
-        self.__image_tag = str()
-        self.__image_caption_tag = str()
-        self.__author_tag = str()
-        self.__date_tag = str()
+        self.heading_tag = str()
+        self.subheading_tag = str()
+        self.text_tag = str()
+        self.subtext_tag = str()
+        self.image_tag = str()
+        self.image_caption_tag = str()
+        self.author_tag = str()
+        self.date_tag = str()

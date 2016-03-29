@@ -3,11 +3,11 @@ import datetime
 
 class search:
     def __init__(self):
-        self.__id = int()
-        self.__term = str()
-        self.__status = int()
-        self.__date_begin = datetime.datetime()
-        self.__date_end = datetime.datetime()
-        self.__limit_news = int()
-        self.__domains = list()
-        self.__news = list()
+        self.id = int()
+        self.term = str()
+        self.status = int()
+        self.date_begin = datetime.datetime()
+        self.date_end = datetime.datetime()
+        self.limit_news = int()
+        self.domains = list()
+        self.news = list()

@@ -1,7 +1,7 @@
 class Domain:
     def __init__(self):
-        self.__url = str()
-        self.__name = str()
-        self.__connection_timeout = int()
-        self.__connection_wait = int()
-        self.__connection_attempts = int()
+        self.url = str()
+        self.name = str()
+        self.connection_timeout = int()
+        self.connection_wait = int()
+        self.connection_attempts = int()
