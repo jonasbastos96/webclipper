@@ -1,18 +1,19 @@
-from .page import Page
+from .structure import Structure
 
 
-class Subdomain:
-    """ Show to news the possible pages' structures.
+class Section:
+    """
+    Show to news the possible pages' structures.
 
-        Attributes:
-            url: String with the url of sub-domain.
-            pages: List of Pages.
+    Attributes:
+        url: String with the url of sub-domain.
+        structures: List of Pages.
     """
 
     def __init__(self):
         # Define attributes
         self.url = str()
-        self.pages = list()
+        self.structures = list()
 
         # Load pages from database
         self.loadPages()

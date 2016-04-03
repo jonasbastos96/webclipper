@@ -1,13 +1,14 @@
-from .subdomain import Subdomain
+from .section import Section
 from .domain import Domain
 import datetime
 
 
 class News:
-    """ Show to news the possible pages' structures.
+    """
+    Show to news a possible page structure.
 
-        Attributes:
-            url: String with the url of sub-domain.
+    Attributes:
+        url: String with the url of sub-domain.
     """
 
     def __init__(self):
@@ -16,5 +17,5 @@ class News:
         self.author = str()
         self.date = datetime.datetime()
         self.dirHtml = str()
-        self.subdomain = Subdomain()
+        self.section = Section()
         self.domain = Domain()

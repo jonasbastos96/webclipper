@@ -1,8 +1,9 @@
-class Page:
-    """ Show to news the possible pages' structures.
+class Structure:
+    """
+    Show to news the possible pages' structures.
 
-        All attributes are lists of strings containing a valid xpath to
-        certain part of news.
+    All attributes are lists of strings containing a valid xpath to
+    certain part of news.
     """
 
     def __init__(self):
