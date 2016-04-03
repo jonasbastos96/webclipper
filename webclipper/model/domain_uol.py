@@ -1,4 +1,4 @@
-from .domain import Domain
+from webclipper.model.domain import Domain
 import requests
 import time
 

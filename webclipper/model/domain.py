@@ -1,5 +1,8 @@
 import requests
 import time
+import re
+import shutil
+from lxml import html
 
 
 class Domain(object):
@@ -50,3 +53,26 @@ class Domain(object):
         # Change encode
         src_page.encoding = self.encoding
         return src_page.text
+
+    def obtain_element(self, url=str()):
+        source = self.obtain_source(url)
+        element = html.fromstring(source)
+        return element
+
+    def download_image(self, url=str()):
+        # image to be saved
+        imgtosave = requests.get(url, stream=True)
+
+        # Filename according original name
+        filename = re.search("([^/?#]*\.[^/?#]*?$)", url)
+        filename = filename.groups()[0]
+
+        # Saving image
+        if imgtosave.status_code == 200:
+            with open("..\\temp\\" + filename, "wb") as file:
+                file.raw.decode_content = True
+                shutil.copyfileobj(imgtosave.raw, file)
+
+        # Directory of saved image
+        image_dir = "..\\webclipper\\temp\\" + filename
+        return image_dir
