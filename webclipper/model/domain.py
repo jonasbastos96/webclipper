@@ -1,7 +1,8 @@
-import requests
-import time
+from webclipper import exceptions
 import re
 import shutil
+import time
+import requests
 from lxml import html
 
 
@@ -33,19 +34,20 @@ class Domain(object):
                 if src_page.status_code in bad_status_code:
                     # In case wasn't found, raise an error
                     if src_page.status_code == 404:
-                        err = "Page not found"
-                        raise requests.HTTPError(err)
+                        raise exceptions.PageNotFound()
                     # Clear what was found
                     src_page = str()
 
+            # In case of connection timeout, raise an error
+            except requests.Timeout:
+                raise exceptions.Timeout()
             # In case of an connection error, ignore and try again
             except requests.ConnectionError:
                 pass
 
             # If attempts of get the source is higher than limit, raise an error
             if attempts > limit > 0:
-                err = "Limit of attempts reached"
-                raise requests.HTTPError(err)
+                raise exceptions.AttemptsError()
 
             if attempts > 1:
                 time.sleep(wait)
@@ -60,19 +62,27 @@ class Domain(object):
         return element
 
     def download_image(self, url=str()):
-        # image to be saved
-        imgtosave = requests.get(url, stream=True)
+        image_dir = str()
+        try:
+            # image to be saved
+            imgtosave = requests.get(url, stream=True)
 
-        # Filename according original name
-        filename = re.search("([^/?#]*\.[^/?#]*?$)", url)
-        filename = filename.groups()[0]
+            # Filename according original name
+            filename = re.search("([^/?#]*\.[^/?#]*?$)", url)
+            filename = filename.groups()[0]
 
-        # Saving image
-        if imgtosave.status_code == 200:
-            with open("..\\temp\\" + filename, "wb") as file:
-                file.raw.decode_content = True
-                shutil.copyfileobj(imgtosave.raw, file)
+            # Saving image
+            if imgtosave.status_code == 200:
+                with open("..\\temp\\" + filename, "wb") as file:
+                    file.raw.decode_content = True
+                    shutil.copyfileobj(imgtosave.raw, file)
 
-        # Directory of saved image
-        image_dir = "..\\webclipper\\temp\\" + filename
+            # Directory of saved image
+            image_dir = "..\\webclipper\\temp\\" + filename
+        except (Exception, requests.HTTPError):
+            raise exceptions.DownloadError()
+
+        if not image_dir:
+            raise exceptions.DownloadError()
+
         return image_dir
