@@ -1,21 +1,14 @@
+from .domain import Domain
 import requests
 import time
 
 
-class Domain(object):
+class DomainUol(Domain):
     def __init__(self):
-        self.url = str()
-        self.name = str()
-        self.connection_timeout = int()
-        self.connection_wait = int()
-        self.connection_attempts = int()
-        self.connection_header = str()
-        self.encoding = str()
+        super(Domain, self).__init__()
 
     def obtain_source(self, url: str()):
         # Initial parameters
-        limit = self.connection_attempts
-        wait = self.connection_wait
         attempts = 0
         src_page = str()
         bad_status_code = (403, 404)
@@ -39,13 +32,8 @@ class Domain(object):
             except requests.ConnectionError:
                 pass
 
-            # If attempts of get the source is higher than limit, raise an error
-            if attempts > limit > 0:
-                err = "Limit of attempts reached"
-                raise requests.HTTPError(err)
-
-            if attempts > 1:
-                time.sleep(wait)
+            if attempts % 100 == 0:
+                time.sleep(attempts//10)
 
         # Change encode
         src_page.encoding = self.encoding
