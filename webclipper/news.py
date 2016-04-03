@@ -16,6 +16,6 @@ class News:
         self.title = str()
         self.author = str()
         self.date = datetime.datetime()
-        self.dirHtml = str()
+        self.dir_html = str()
         self.section = Section()
         self.domain = Domain()

@@ -1,6 +1,3 @@
-from .structure import Structure
-
-
 class Section:
     """
     Show to news the possible pages' structures.
@@ -16,8 +13,8 @@ class Section:
         self.structures = list()
 
         # Load pages from database
-        self.loadPages()
+        self.load_pages()
 
-    def loadPages(self):
+    def load_pages(self):
         """ Create and load pages objects from database """
         return None
