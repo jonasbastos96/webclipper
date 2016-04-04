@@ -1,5 +1,4 @@
-from .section import Section
-from .domain import Domain
+from webclipper.model.section import Section
 import datetime
 
 
@@ -18,4 +17,3 @@ class News:
         self.date = datetime.datetime()
         self.dir_html = str()
         self.section = Section()
-        self.domain = Domain()

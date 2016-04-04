@@ -7,7 +7,7 @@ from lxml import html
 
 
 class Domain(object):
-    def __init__(self):
+    def __init__(self, **kwargs):
         self.url = str()
         self.name = str()
         self.connection_timeout = int()
@@ -15,6 +15,15 @@ class Domain(object):
         self.connection_attempts = int()
         self.connection_header = str()
         self.encoding = str()
+
+        if "row" in kwargs.keys():
+            self.url = kwargs["row"][0]
+            self.name = kwargs["row"][1]
+            self.connection_timeout = kwargs["row"][2]
+            self.connection_wait = kwargs["row"][3]
+            self.connection_attempts = kwargs["row"][4]
+            self.connection_header = kwargs["row"][5]
+            self.encoding = kwargs["row"][6]
 
     def obtain_source(self, url: str()):
         # Initial parameters
