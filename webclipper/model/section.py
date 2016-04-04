@@ -1,7 +1,6 @@
-import sqlite3
-from webclipper.model.structure import Structure
-from webclipper.model.domain import Domain
 from webclipper.databases import dbinfo
+from webclipper.model.domain import Domain
+from webclipper.model.structure import Structure
 
 
 class Section:
@@ -28,15 +27,11 @@ class Section:
     def load_structures(self):
         """ Create and load pages objects from database """
         # Retrieve structures from database
-        connection = sqlite3.connect(dbinfo.location)
         query = "SELECT * FROM structure " \
                 "JOIN section " \
                 "ON section.url = structure.section_url " \
                 "WHERE section.url = '" + self.url + "';"
-        cursor = connection.execute(query)
-        result = cursor.fetchall()
-        cursor.close()
-        connection.close()
+        result = dbinfo.select(query)
 
         # Instance and append each structure to list
         for row in result:
@@ -45,17 +40,13 @@ class Section:
 
     def load_domain(self):
         # Retrieve structures from database
-        connection = sqlite3.connect(dbinfo.location)
         query = "SELECT * FROM domain " \
                 "JOIN section " \
                 "ON domain.url = section.domain_url " \
                 "WHERE section.url = '{url}' " \
                 "LIMIT 1;" \
             .format(url=self.url)
-        cursor = connection.execute(query)
-        result = cursor.fetchall()
-        cursor.close()
-        connection.close()
+        result = dbinfo.select(query)
 
         for row in result:
             domain = Domain(row=row)

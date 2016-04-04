@@ -1,9 +1,11 @@
-from webclipper import exceptions
 import re
 import shutil
 import time
+
 import requests
 from lxml import html
+
+from webclipper import exceptions
 
 
 class Domain(object):

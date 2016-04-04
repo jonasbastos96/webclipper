@@ -20,3 +20,9 @@ class PageNotFound(Exception):
     def __init__(self, message="Page not found"):
         # Call the base class constructor with the parameters it needs
         super(PageNotFound, self).__init__(message)
+
+
+class UnsupportedSection(Exception):
+    def __init__(self, message="Domain don't contain any structure"):
+        # Call the base class constructor with the parameters it needs
+        super(UnsupportedSection, self).__init__(message)

@@ -1,6 +1,8 @@
-from webclipper.model.domain import Domain
-import requests
 import time
+
+import requests
+
+from webclipper.model.domain import Domain
 
 
 class DomainUol(Domain):

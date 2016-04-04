@@ -1,5 +1,6 @@
-from webclipper.model.section import Section
 import datetime
+
+from webclipper.model.section import Section
 
 
 class News:
