@@ -1,3 +1,8 @@
+import sqlite3
+from webclipper.model.structure import Structure
+from webclipper.databases import dbinfo
+
+
 class Section:
     """
     Show to news the possible pages' structures.
@@ -7,14 +12,26 @@ class Section:
         structures: List of Pages.
     """
 
-    def __init__(self):
+    def __init__(self, url=str()):
         # Define attributes
-        self.url = str()
+        self.url = url
         self.structures = list()
 
         # Load pages from database
-        self.load_pages()
+        self.load_structures()
 
-    def load_pages(self):
+    def load_structures(self):
         """ Create and load pages objects from database """
-        return None
+        # Retrieve structures from database
+        connection = sqlite3.connect(dbinfo.location)
+        query = "SELECT * FROM structure " \
+                "JOIN section " \
+                "ON section.url = structure.section_url " \
+                "WHERE section.url LIKE '%" + self.url + "%';"
+        cursor = connection.execute(query)
+        connection.close()
+
+        # Instance and append each structure to list
+        for row in cursor:
+            structure = Structure(row=row)
+            self.structures.append(structure)
