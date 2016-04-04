@@ -33,7 +33,7 @@ class DomainUol(Domain):
                 pass
 
             if attempts % 100 == 0:
-                time.sleep(attempts//10)
+                time.sleep(attempts // 10)
 
         # Change encode
         src_page.encoding = self.encoding
