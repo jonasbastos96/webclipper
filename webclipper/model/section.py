@@ -1,3 +1,5 @@
+from webclipper import exceptions
+from webclipper import utils
 from webclipper.databases import dbinfo
 from webclipper.model.domain import Domain
 from webclipper.model.structure import Structure
@@ -52,3 +54,19 @@ class Section:
             domain = Domain(row=row)
 
         self.domain = domain
+
+    def retrieve_content(self, url: str()):
+        """ Generate a html element from a valid url """
+        pages = list()
+        for structure in self.structures:
+            page_elements = self.domain.obtain_element(url)
+            for node in page_elements:
+                if node.tag in structure.heading_tag:
+                    self.generate_heading(node)
+
+    def generate_heading(self, node):
+        content = node.text
+        content = utils.remove_spaces(content)
+        if not utils.is_valid_string(content):
+            raise exceptions.EmptyNodeContent()
+        return content
