@@ -98,7 +98,7 @@ class Structure:
                "<style>\n" \
                ".main-content {{text-align: justify; text-indent: 50px;}}\n" \
                ".caption {{text-align: center;}}\n" \
-               "img {{display: block; margin: 0 auto;}}\n" \
+               "img {{display: block; margin: 0 auto; width: 400px;}}\n" \
                "</style>\n" \
                "<meta charset='{encoding}'>\n" \
                "<head>\n" \
@@ -140,8 +140,23 @@ class Structure:
 
     def __disassembly_text(self, node: html.HtmlElement, is_first=True) -> str:
         text = str()
-        if node.text:
+
+        # Tags to ignore
+        if node.tag in ("script",):
+            return text
+
+        # Check if node is a breakspace <br> or a text
+        if node.tag == "br":
+            text = "<br>"
+        elif node.text:
             text += node.text
+
+        # If text use tag strong, make it strong (bold)
+        if node.tag == "strong":
+            text = "<strong>" + text + "</strong>"
+        # If text use em tag, make it em (italic)
+        elif node.tag == "em":
+            text = "<em>" + text + "</em>"
 
         # Check if node have childrens and retrieve its texts
         childrens = node.xpath("./*")

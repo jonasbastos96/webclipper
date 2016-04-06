@@ -18,7 +18,7 @@ class Section:
     """
 
     # TODO add exception when instancing a unsupported url
-    def __init__(self, url=str()):
+    def __init__(self, url: str = None):
         # Define attributes
         self.url = url
         self.domain = Domain()
@@ -72,6 +72,9 @@ class Section:
         # Obtain element from link
         element = self.domain.obtain_element(url)
 
+        # Filter page
+        self.filter_element(element)
+
         # Generate content
         contents = self.__generate_content(element)
 
@@ -92,6 +95,9 @@ class Section:
             except exceptions.UnsupportedURL:
                 pass
         return contents
+
+    def filter_element(self, element: html.HtmlElement):
+        return None
 
     def __analyse_content(self, contents: list) -> html.HtmlElement:
         max_parag = 0

@@ -69,7 +69,7 @@ class Domain(object):
         src_page.encoding = self.encoding
         return src_page.text
 
-    def obtain_element(self, url=str()):
+    def obtain_element(self, url=str()) -> html.HtmlElement:
         source = self.obtain_source(url)
         element = html.fromstring(source)
         return element
