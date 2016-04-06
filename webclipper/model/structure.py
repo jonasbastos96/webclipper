@@ -19,7 +19,7 @@ class Structure:
     def __init__(self, **kwargs):
         self.id = int()
         self.title_tag = list()
-        self.heading_tag = list()
+        self.subheading_tag = list()
         self.text_tag = list()
         self.image_tag = list()
         self.caption_tag = list()
@@ -34,7 +34,7 @@ class Structure:
             if kwargs["row"][1]:
                 self.title_tag = kwargs["row"][1].split(",")
             if kwargs["row"][2]:
-                self.heading_tag = kwargs["row"][2].split(",")
+                self.subheading_tag = kwargs["row"][2].split(",")
             if kwargs["row"][3]:
                 self.text_tag = kwargs["row"][3].split(",")
             if kwargs["row"][4]:
@@ -56,8 +56,8 @@ class Structure:
         # Format each according its pattern
         for node in nodes:
             try:
-                if node.tag in self.heading_tag:
-                    source += self.__obtain_heading(node)
+                if node.tag in self.subheading_tag:
+                    source += self.__obtain_subheading(node)
                 elif node.tag in self.text_tag:
                     source += self.__obtain_text(node)
                 elif node.tag in self.image_tag:
@@ -113,26 +113,27 @@ class Structure:
 
         return source
 
-    def __obtain_heading(self, node: html.HtmlElement) -> str:
+    def __obtain_subheading(self, node: html.HtmlElement) -> str:
         # Check if node have content
         if not node.text:
             raise exceptions.EmptyNodeContent()
 
         # Organize source
         text_formated = utils.remove_spaces(node.text)
-        source = "<h1>" + text_formated + "</h1>\n"
+        source = "<h2>" + text_formated + "</h2>\n"
 
         return source
 
     def __obtain_text(self, node: html.HtmlElement) -> str:
+        # Prepare text to be analysed
         text = self.__disassembly_text(node)
+        text = utils.remove_spaces(text)
 
         # Check if disassembled text have content
         if not text:
             raise exceptions.EmptyNodeContent()
 
         # Organize source
-        text = utils.remove_spaces(text)
         source = "<p class='main-content'>" + text + "</p>\n"
 
         return source
@@ -170,13 +171,16 @@ class Structure:
         return source
 
     def __obtain_caption(self, node: html.HtmlElement) -> str:
+        # Prepare text to be analysed
+        text = self.__disassembly_text(node)
+        text = utils.remove_spaces(text)
+
         # Check if node have content
-        if not node.text:
+        if not text:
             raise exceptions.EmptyNodeContent()
 
         # Organize source
-        text_formated = utils.remove_spaces(node.text)
-        source = "<p class='caption'><small>" + text_formated + \
+        source = "<p class='caption'><small>" + text + \
                  "</small></p>\n"
 
         return source

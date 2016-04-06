@@ -63,3 +63,6 @@ target/
 
 # Tests
 tests
+
+# Temporary folder
+/webclipper/temp

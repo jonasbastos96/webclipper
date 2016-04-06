@@ -1,10 +1,10 @@
 from lxml import html
 
-from webclipper import utils
 from webclipper import exceptions
 from webclipper.config import dbconnection
 from webclipper.config import locations
 from webclipper.model.domain import Domain
+from webclipper.model.domain_elmundo import DomainElmundo
 from webclipper.model.structure import Structure
 
 
@@ -55,8 +55,12 @@ class Section:
             .format(url=self.url)
         result = dbconnection.select(query)
 
+        # Load corretly domain
         for row in result:
-            domain = Domain(row=row)
+            if row[0] == "http://www.elmundo.es/":
+                domain = DomainElmundo(row=row)
+            else:
+                domain = Domain(row=row)
 
         if not domain:
             raise exceptions.UnsupportedSection()
@@ -126,8 +130,5 @@ class Section:
 
         # Try to download each image
         for images in images_node:
-            try:
-                image_url = images.get("original_src")
+                image_url = images.get("orig_src")
                 self.domain.download_image(image_url)
-            except Exception:
-                pass

@@ -19,7 +19,7 @@ class DomainUol(Domain):
         while not src_page:
             attempts += 1
             try:
-                src_page = requests.get(url, headers=self.connection_header,
+                src_page = requests.get(url, headers=self.connection_agent,
                                         timeout=self.connection_timeout)
                 # If page can't be captured
                 if src_page.status_code in bad_status_code:

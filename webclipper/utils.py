@@ -1,3 +1,4 @@
+import os
 import re
 
 
@@ -26,3 +27,9 @@ def decode_text(text):
         # logging.warning("Unicode Warning: Can't handle decode.")
         pass
     return result
+
+
+def clear_folder(directory: str):
+    files = os.listdir(directory)
+    for file in files:
+        os.remove(directory + file)
