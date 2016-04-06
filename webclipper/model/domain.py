@@ -72,15 +72,16 @@ class Domain(object):
         element = html.fromstring(source)
         return element
 
-    def download_image(self, url=str()):
+    def download_image(self, url=str(), filename: str = None):
         image_dir = str()
         try:
             # image to be saved
             imgtosave = requests.get(url, stream=True)
 
-            # Filename according original name
-            filename = re.search("([^/?#]*\.[^/?#]*?$)", url)
-            filename = filename.groups()[0]
+            # If not filename was passed, fetch one according original name
+            if not filename:
+                filename = re.search("([^/?#]*\.[^/?#]*?$)", url)
+                filename = filename.groups()[0]
 
             # Saving image
             if imgtosave.status_code == 200:

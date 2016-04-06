@@ -1,12 +1,10 @@
-import os
 import sqlite3
 
-__package_dir = os.path.abspath(os.path.dirname(__file__))
-location = os.path.join(__package_dir, 'database.db')
+from webclipper.config import locations
 
 
 def select(query: str()):
-    connection = sqlite3.connect(location)
+    connection = sqlite3.connect(locations.database)
     cursor = connection.execute(query)
     result = cursor.fetchall()
     cursor.close()
@@ -15,7 +13,7 @@ def select(query: str()):
 
 
 def modify(query: str()):
-    connection = sqlite3.connect(location)
+    connection = sqlite3.connect(locations.database)
     connection.execute(query)
     connection.commit()
     connection.close()
