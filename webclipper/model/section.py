@@ -1,5 +1,6 @@
 from lxml import html
 
+from webclipper import utils
 from webclipper import exceptions
 from webclipper.config import dbconnection
 from webclipper.config import locations
@@ -102,18 +103,21 @@ class Section:
         return best_content
 
     def __parse_to_html(self, content: html.HtmlElement) -> str:
+        # Set default domain encoding
+        encoding = self.domain.encoding
+
         # Download pending images
         self.__resolve_images(content)
 
         # Mount source
         source = Structure.HEAD_CONTENT
         source += "<body>\n"
-        source += str(html.tostring(content))
+        source += html.tostring(content, encoding=encoding).decode(encoding)
         source += "</body>\n"
 
         # Create HTML file
         filedir = locations.temp_folder + "news.html"
-        file = open(filedir, "w", encoding="utf-8")
+        file = open(filedir, "w", encoding=encoding)
         file.write(source)
         file.close()
         return filedir

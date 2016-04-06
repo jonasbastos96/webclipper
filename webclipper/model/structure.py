@@ -13,14 +13,15 @@ class Structure:
     """
 
     # Class atributes
-    HEAD_CONTENT = "<head><br>\n" \
-                   "<style><br>\n" \
-                   ".main-content {text-align: justify; text-indent: 50px;}<br>\n" \
-                   ".caption {text-align: center;}<br>\n" \
-                   "img {display: block; margin: 0 auto;}<br>\n" \
-                   "</style><br>\n" \
-                   "<meta charset='utf-8'><br>\n" \
-                   "<head><br>\n"
+    # TODO ajust charset for each url
+    HEAD_CONTENT = "<head>\n" \
+                   "<style>\n" \
+                   ".main-content {text-align: justify; text-indent: 50px;}\n" \
+                   ".caption {text-align: center;}\n" \
+                   "img {display: block; margin: 0 auto;}\n" \
+                   "</style>\n" \
+                   "<meta charset='utf-8'>\n" \
+                   "<head>\n"
 
     # Instance attributes
     def __init__(self, **kwargs):
@@ -58,14 +59,17 @@ class Structure:
         nodes = element.xpath(self.content_path)
 
         for node in nodes:
-            if node.tag in self.heading_tag:
-                source += self.__obtain_heading(node)
-            elif node.tag in self.text_tag:
-                source += self.__obtain_text(node)
-            elif node.tag in self.image_tag:
-                source += self.__obtain_image(node)
-            elif node.tag in self.caption_tag:
-                source += self.__obtain_caption(node)
+            try:
+                if node.tag in self.heading_tag:
+                    source += self.__obtain_heading(node)
+                elif node.tag in self.text_tag:
+                    source += self.__obtain_text(node)
+                elif node.tag in self.image_tag:
+                    source += self.__obtain_image(node)
+                elif node.tag in self.caption_tag:
+                    source += self.__obtain_caption(node)
+            except exceptions.EmptyNodeContent:
+                pass
 
         content = html.fromstring(source)
         if not self.__is_valid_content(content):
@@ -80,7 +84,7 @@ class Structure:
 
         # Organize source
         text_formated = utils.remove_spaces(node.text)
-        source = "<h1>" + text_formated + "</h1><br>\n"
+        source = "<h1>" + text_formated + "</h1>\n"
 
         return source
 
@@ -92,7 +96,8 @@ class Structure:
             raise exceptions.EmptyNodeContent()
 
         # Organize source
-        source = "<p class='main-content'>" + text + "</p><br>\n"
+        text = utils.remove_spaces(text)
+        source = "<p class='main-content'>" + text + "</p>\n"
 
         return source
 
@@ -136,7 +141,7 @@ class Structure:
         # Organize source
         text_formated = utils.remove_spaces(node.text)
         source = "<p class='caption'><small>" + text_formated + \
-                 "</small></p><br>\n"
+                 "</small></p>\n"
 
         return source
 
