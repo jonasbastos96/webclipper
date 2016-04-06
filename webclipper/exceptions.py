@@ -23,13 +23,13 @@ class PageNotFound(Exception):
 
 
 class UnsupportedSection(Exception):
-    def __init__(self, message="Domain don't contain any structure"):
+    def __init__(self, message="Section don't contain any structure"):
         # Call the base class constructor with the parameters it needs
         super(UnsupportedSection, self).__init__(message)
 
 
 class UnsupportedDomain(Exception):
-    def __init__(self, message="Domain don't contain any structure"):
+    def __init__(self, message="Domain isn't supported"):
         # Call the base class constructor with the parameters it needs
         super(UnsupportedDomain, self).__init__(message)
 
@@ -44,3 +44,9 @@ class EmptyNodeContent(Exception):
     def __init__(self, message="Node doesn't contain any content"):
         # Call the base class constructor with the parameters it needs
         super(EmptyNodeContent, self).__init__(message)
+
+
+class IncorrectQuery(Exception):
+    def __init__(self, message="An incorrect query was done"):
+        # Call the base class constructor with the parameters it needs
+        super(IncorrectQuery, self).__init__(message)

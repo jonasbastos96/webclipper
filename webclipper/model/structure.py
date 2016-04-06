@@ -2,6 +2,7 @@ from lxml import html
 
 from webclipper import exceptions
 from webclipper import utils
+from webclipper.config import dbconnection
 
 
 class Structure:
@@ -13,18 +14,10 @@ class Structure:
     """
 
     # Class atributes
-    # TODO ajust charset for each url
-    HEAD_CONTENT = "<head>\n" \
-                   "<style>\n" \
-                   ".main-content {text-align: justify; text-indent: 50px;}\n" \
-                   ".caption {text-align: center;}\n" \
-                   "img {display: block; margin: 0 auto;}\n" \
-                   "</style>\n" \
-                   "<meta charset='utf-8'>\n" \
-                   "<head>\n"
 
     # Instance attributes
     def __init__(self, **kwargs):
+        self.id = int()
         self.title_tag = list()
         self.heading_tag = list()
         self.text_tag = list()
@@ -37,6 +30,7 @@ class Structure:
         self.date_format = str()
 
         if "row" in kwargs.keys():
+            self.id = kwargs["row"][0]
             if kwargs["row"][1]:
                 self.title_tag = kwargs["row"][1].split(",")
             if kwargs["row"][2]:
@@ -54,10 +48,12 @@ class Structure:
             self.date_format = kwargs["row"][10]
 
     def parse_to_content(self, element: html.HtmlElement) -> html.HtmlElement:
-
         source = str()
+
+        # Get valid content nodes
         nodes = element.xpath(self.content_path)
 
+        # Format each according its pattern
         for node in nodes:
             try:
                 if node.tag in self.heading_tag:
@@ -71,11 +67,51 @@ class Structure:
             except exceptions.EmptyNodeContent:
                 pass
 
+        # Add base html to content
+        source = self.__add_base_html(source)
+
+        # Create a new html element with content
         content = html.fromstring(source)
+
+        # Check if is a valid content
         if not self.__is_valid_content(content):
             raise exceptions.UnsupportedURL()
 
         return content
+
+    def __add_base_html(self, source: str):
+        # Query for correct encoding
+        query = "SELECT domain.encoding from domain " \
+                "JOIN section ON domain.url = section.domain_url " \
+                "JOIN structure ON section.url = structure.section_url " \
+                "WHERE structure.id = {id} " \
+                "LIMIT 1" \
+            .format(id=self.id)
+        result = dbconnection.select(query)
+        if result:
+            encoding = result[0][0]
+        else:
+            raise exceptions.IncorrectQuery()
+
+        # Build specific head for page
+        head = "<head>\n" \
+               "<style>\n" \
+               ".main-content {{text-align: justify; text-indent: 50px;}}\n" \
+               ".caption {{text-align: center;}}\n" \
+               "img {{display: block; margin: 0 auto;}}\n" \
+               "</style>\n" \
+               "<meta charset='{encoding}'>\n" \
+               "<head>\n" \
+            .format(encoding=encoding)
+
+        # Build specific body for page
+        body_begin = "<body>\n"
+        body_end = "</body>\n"
+
+        # Merge head, body and source
+        source = head + body_begin + source + body_end
+
+        return source
 
     def __obtain_heading(self, node: html.HtmlElement) -> str:
         # Check if node have content

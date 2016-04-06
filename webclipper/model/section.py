@@ -109,13 +109,10 @@ class Section:
         # Download pending images
         self.__resolve_images(content)
 
-        # Mount source
-        source = Structure.HEAD_CONTENT
-        source += "<body>\n"
-        source += html.tostring(content, encoding=encoding).decode(encoding)
-        source += "</body>\n"
+        # Transform content to html text source
+        source = html.tostring(content, encoding=encoding).decode(encoding)
 
-        # Create HTML file
+        # Create a HTML file
         filedir = locations.temp_folder + "news.html"
         file = open(filedir, "w", encoding=encoding)
         file.write(source)
