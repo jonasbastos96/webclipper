@@ -5,8 +5,8 @@ import time
 import requests
 from lxml import html
 
-from webclipper.config import locations
 from webclipper import exceptions
+from webclipper.config import locations
 
 
 class Domain(object):

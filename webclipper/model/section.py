@@ -130,5 +130,5 @@ class Section:
 
         # Try to download each image
         for images in images_node:
-                image_url = images.get("orig_src")
-                self.domain.download_image(image_url)
+            image_url = images.get("orig_src")
+            self.domain.download_image(image_url)
