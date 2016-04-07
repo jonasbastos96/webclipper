@@ -101,3 +101,6 @@ class Domain(object):
             raise exceptions.DownloadError()
 
         return image_dir
+
+    def list_news(self, term: str) -> list:
+        raise NotImplementedError()
