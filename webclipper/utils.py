@@ -20,15 +20,6 @@ def filename_from_url(url: str) -> str:
     return filename
 
 
-def decode_text(text):
-    try:
-        result = bytes(text, "latin1").decode("utf-8")
-    except (UnicodeDecodeError, UnicodeEncodeError):
-        # logging.warning("Unicode Warning: Can't handle decode.")
-        pass
-    return result
-
-
 def clear_folder(directory: str):
     files = os.listdir(directory)
     for file in files:

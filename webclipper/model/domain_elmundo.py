@@ -10,6 +10,7 @@ from webclipper.model.domain import Domain
 
 class DomainElmundo(Domain):
     def __init__(self):
+        super(DomainElmundo, self).__init__()
         query = "SELECT * FROM domain " \
                 "WHERE domain.url = 'http://www.elmundo.es/'"
         result = dbconnection.select(query)
