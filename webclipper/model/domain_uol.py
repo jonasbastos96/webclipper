@@ -17,7 +17,7 @@ class DomainUol(Domain):
     def __init__(self):
         super(DomainUol, self).__init__()
         query = "SELECT * FROM domain " \
-                "WHERE domain.url = 'http://www.uol.com.br/'"
+                "WHERE name = 'Uol'"
 
         result = dbconnection.select(query)
 

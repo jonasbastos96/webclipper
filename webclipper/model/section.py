@@ -5,6 +5,8 @@ from webclipper.config import dbconnection
 from webclipper.config import locations
 from webclipper.model.domain import Domain
 from webclipper.model.domain_elmundo import DomainElmundo
+from webclipper.model.domain_uol import DomainUol
+from webclipper.model.domain_globo import DomainGlobo
 from webclipper.model.structure import Structure
 
 
@@ -18,7 +20,7 @@ class Section:
     """
 
     # TODO add exception when instancing a unsupported url
-    def __init__(self, url: str = None):
+    def __init__(self, url: str):
         # Define attributes
         self.url = url
         self.domain = Domain()
@@ -46,7 +48,7 @@ class Section:
 
     def load_domain(self):
         # Retrieve structures from database
-        domain = None
+        domain = Domain
         query = "SELECT * FROM domain " \
                 "JOIN section " \
                 "ON domain.url = section.domain_url " \
@@ -57,10 +59,14 @@ class Section:
 
         # Load corretly domain
         for row in result:
-            if row[0] == "http://www.elmundo.es/":
-                domain = DomainElmundo(row=row)
+            if row[1] == "Elmudno":
+                domain = DomainElmundo()
+            elif row[1] == "Uol":
+                domain = DomainUol()
+            elif row[1] == "Globo":
+                domain = DomainGlobo()
             else:
-                domain = Domain(row=row)
+                raise exceptions.UnsupportedDomain()
 
         if not domain:
             raise exceptions.UnsupportedSection()

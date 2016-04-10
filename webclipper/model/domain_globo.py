@@ -14,7 +14,7 @@ class DomainGlobo(Domain):
     def __init__(self):
         super(DomainGlobo, self).__init__()
         query = "SELECT * FROM domain " \
-                "WHERE domain.url = 'http://www.globo.com/'"
+                "WHERE name = 'Globo'"
 
         result = dbconnection.select(query)
 

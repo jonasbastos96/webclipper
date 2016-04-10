@@ -50,3 +50,9 @@ class IncorrectQuery(Exception):
     def __init__(self, message="An incorrect query was done"):
         # Call the base class constructor with the parameters it needs
         super(IncorrectQuery, self).__init__(message)
+
+
+class NotHaveSection(Exception):
+    def __init__(self, message="This url don't have a valid section"):
+        # Call the base class constructor with the parameters it needs
+        super(NotHaveSection, self).__init__(message)
