@@ -12,7 +12,7 @@ class DomainElmundo(Domain):
     def __init__(self):
         super(DomainElmundo, self).__init__()
         query = "SELECT * FROM domain " \
-                "WHERE name = 'Elmudno'"
+                "WHERE name = 'Elmundo'"
         result = dbconnection.select(query)
 
         for row in result:

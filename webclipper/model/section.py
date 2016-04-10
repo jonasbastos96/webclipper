@@ -1,3 +1,5 @@
+import datetime
+
 from lxml import html
 
 from webclipper import exceptions
@@ -5,8 +7,8 @@ from webclipper.config import dbconnection
 from webclipper.config import locations
 from webclipper.model.domain import Domain
 from webclipper.model.domain_elmundo import DomainElmundo
-from webclipper.model.domain_uol import DomainUol
 from webclipper.model.domain_globo import DomainGlobo
+from webclipper.model.domain_uol import DomainUol
 from webclipper.model.structure import Structure
 
 
@@ -20,17 +22,18 @@ class Section:
     """
 
     # TODO add exception when instancing a unsupported url
-    def __init__(self, url: str):
+    def __init__(self, url: str = None):
         # Define attributes
         self.url = url
         self.domain = Domain()
         self.structures = list()
 
-        # Load pages from database
-        self.load_structures()
+        if url:
+            # Load pages from database
+            self.load_structures()
 
-        # Load domain
-        self.load_domain()
+            # Load domain
+            self.load_domain()
 
     def load_structures(self):
         """ Create and load pages objects from database """
@@ -59,7 +62,7 @@ class Section:
 
         # Load corretly domain
         for row in result:
-            if row[1] == "Elmudno":
+            if row[1] == "Elmundo":
                 domain = DomainElmundo()
             elif row[1] == "Uol":
                 domain = DomainUol()
@@ -74,10 +77,7 @@ class Section:
         self.domain = domain
 
     # TODO add exceptions
-    def generate_html(self, url: str) -> str:
-        # Obtain element from link
-        element = self.domain.obtain_element(url)
-
+    def generate_html(self, element: html.HtmlElement) -> str:
         # Filter page
         self.filter_element(element)
 
@@ -144,3 +144,45 @@ class Section:
         for images in images_node:
             image_url = images.get("orig_src")
             self.domain.download_image(image_url)
+
+    def obtain_title(self, element: html.HtmlElement) -> str:
+        titles = list()
+        for structure in self.structures:
+            try:
+                title = structure.obtain_title(element)
+                titles.append(title)
+            except exceptions.TitleNotAvailable:
+                continue
+
+        if titles:
+            return titles[0]
+        else:
+            raise exceptions.TitleNotAvailable()
+
+    def obtain_author(self, element: html.HtmlElement) -> str:
+        authors = list()
+        for structure in self.structures:
+            try:
+                author = structure.obtain_author(element)
+                authors.append(author)
+            except exceptions.AuthorNotAvailable:
+                continue
+
+        if authors:
+            return authors[0]
+        else:
+            raise exceptions.AuthorNotAvailable()
+
+    def obtain_date(self, element: html.HtmlElement) -> datetime.datetime:
+        dates = list()
+        for structure in self.structures:
+            try:
+                date = structure.obtain_date(element)
+                dates.append(date)
+            except exceptions.DateNotAvailable:
+                continue
+
+        if dates:
+            return dates[0]
+        else:
+            raise exceptions.DateNotAvailable()

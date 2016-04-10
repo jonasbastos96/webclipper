@@ -1,3 +1,5 @@
+import datetime
+
 from lxml import html
 
 from webclipper import exceptions
@@ -126,7 +128,7 @@ class Structure:
 
     def __obtain_text(self, node: html.HtmlElement) -> str:
         # Prepare text to be analysed
-        text = self.__disassembly_text(node)
+        text = self.__disassembly_text(node, format_text=True)
         text = utils.remove_spaces(text)
 
         # Check if disassembled text have content
@@ -138,25 +140,30 @@ class Structure:
 
         return source
 
-    def __disassembly_text(self, node: html.HtmlElement, is_first=True) -> str:
+    def __disassembly_text(self, node: html.HtmlElement, is_first=True,
+                           format_text=False) -> str:
         text = str()
 
         # Tags to ignore
         if node.tag in ("script",):
             return text
 
-        # Check if node is a breakspace <br> or a text
-        if node.tag == "br":
-            text = "<br>"
+        # If format text is enabled:
+        if format_text:
+            # Check if node is a breakspace <br> or a text
+            if node.tag == "br":
+                text = "<br>"
+            elif node.text:
+                text += node.text
+
+            # If text use tag strong, make it strong (bold)
+            if node.tag == "strong":
+                text = "<strong>" + text + "</strong>"
+            # If text use em tag, make it em (italic)
+            elif node.tag == "em":
+                text = "<em>" + text + "</em>"
         elif node.text:
             text += node.text
-
-        # If text use tag strong, make it strong (bold)
-        if node.tag == "strong":
-            text = "<strong>" + text + "</strong>"
-        # If text use em tag, make it em (italic)
-        elif node.tag == "em":
-            text = "<em>" + text + "</em>"
 
         # Check if node have childrens and retrieve its texts
         childrens = node.xpath("./*")
@@ -207,3 +214,55 @@ class Structure:
             return True
         else:
             return False
+
+    def obtain_title(self, element: html.HtmlElement) -> str:
+        result = element.xpath(self.title_path)
+        if result:
+            pre_title = self.__disassembly_text(result[0])
+            if pre_title:
+                title = pre_title
+            else:
+                raise exceptions.TitleNotAvailable()
+        else:
+            raise exceptions.TitleNotAvailable()
+
+        return title
+
+    def obtain_author(self, element: html.HtmlElement) -> str:
+        try:
+            result = element.xpath(self.author_path)
+        except Exception:
+            raise exceptions.AuthorNotAvailable()
+        if result:
+            pre_author = self.__disassembly_text(result[0])
+            if pre_author:
+                author = pre_author
+            else:
+                raise exceptions.AuthorNotAvailable()
+        else:
+            raise exceptions.AuthorNotAvailable()
+
+        return author
+
+    def obtain_date(self, element: html.HtmlElement) -> datetime.datetime:
+        try:
+            result = element.xpath(self.date_path)
+        except Exception:
+            raise exceptions.DateNotAvailable()
+        if result:
+            # Transform to date
+            date_text = result[0]
+            date = self.__parse_to_date(date_text, self.date_format)
+        else:
+            raise exceptions.DateNotAvailable()
+
+        return date
+
+    def __parse_to_date(self, date_text: str, date_format: str) \
+            -> datetime.datetime:
+        date_cleared = utils.remove_spaces(date_text)
+        try:
+            date = datetime.datetime.strptime(date_cleared, date_format)
+        except Exception:
+            raise exceptions.DateNotAvailable()
+        return date

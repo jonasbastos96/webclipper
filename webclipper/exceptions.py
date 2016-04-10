@@ -56,3 +56,21 @@ class NotHaveSection(Exception):
     def __init__(self, message="This url don't have a valid section"):
         # Call the base class constructor with the parameters it needs
         super(NotHaveSection, self).__init__(message)
+
+
+class TitleNotAvailable(Exception):
+    def __init__(self, message="Can't retrieve the title from source"):
+        # Call the base class constructor with the parameters it needs
+        super(TitleNotAvailable, self).__init__(message)
+
+
+class AuthorNotAvailable(Exception):
+    def __init__(self, message="Can't retrieve the author from source"):
+        # Call the base class constructor with the parameters it needs
+        super(AuthorNotAvailable, self).__init__(message)
+
+class DateNotAvailable(Exception):
+    def __init__(self, message="Can't retrieve the date from source"):
+        # Call the base class constructor with the parameters it needs
+        super(DateNotAvailable, self).__init__(message)
+
