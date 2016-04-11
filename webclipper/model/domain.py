@@ -76,7 +76,7 @@ class Domain(object):
 
     def download_image(self, url: str, filename: str = None) -> str:
         image_dir = str()
-        temp_folder = locations.temp_folder
+        temp_folder = locations.temp_dir
         try:
             # image to be saved
             imgtosave = requests.get(url, stream=True)

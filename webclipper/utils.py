@@ -2,8 +2,6 @@ import os
 import re
 import shutil
 
-from webclipper.config import locations
-
 
 def remove_spaces(text: str):
     text = " ".join(text.split())

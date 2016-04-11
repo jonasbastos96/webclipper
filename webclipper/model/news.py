@@ -1,10 +1,13 @@
 import datetime
+import os
 import re
 
 from lxml import html
 
 from webclipper import exceptions
+from webclipper import utils
 from webclipper.config import dbconnection
+from webclipper.config.locations import temp_dir, news_dir
 from webclipper.model.section import Section
 
 
@@ -93,5 +96,69 @@ class News:
         except exceptions.DateNotAvailable:
             self.date = None
 
-    def retrieve_news(self):
-        print(self.section.generate_html(self.element))
+    def retrieve(self):
+        self.__fetch()
+        self.__storage()
+        self.__save_database()
+
+    def __fetch(self):
+        self.section.generate_html(self.element)
+
+    def __storage(self):
+        # Check latest folder on news folder
+        query = "SELECT id FROM news " \
+                "ORDER BY id DESC " \
+                "LIMIT 1"
+        result = dbconnection.select(query)
+
+        if result:
+            num_folder = int(result[0][0]) + 1
+        else:
+            num_folder = 1
+
+        # Check if folder exists
+        destiny_folder = news_dir + str(num_folder) + "\\"
+        print(destiny_folder)
+        if not os.path.exists(destiny_folder):
+            os.makedirs(destiny_folder)
+        else:
+            utils.clear_folder(destiny_folder)
+
+        # Move temporary files to new folder
+        utils.move_all_folder(temp_dir, destiny_folder)
+
+        self.dir_html = "news\\" + str(num_folder) + "\\"
+
+    def __save_database(self):
+        query = "INSERT INTO news " \
+                "(url, title, author, date, dir_html, section_url) " \
+                "VALUES ("
+        # Url
+        query = query + "'" + self.url + "' , "
+
+        # Title
+        query = query + "'" + self.title + "', "
+
+        # Author
+        if self.author:
+            query = query + "'" + self.author + "', "
+        else:
+            query += "NULL, "
+
+        # Date
+        if self.date:
+            date = self.date.strftime("%Y-%m-%d %H:%M:%S")
+            query = query + "'" + date + "', "
+        else:
+            query += "NULL, "
+
+        # Dir_html
+        query = query + "'" + self.dir_html + "', "
+
+        # Section html
+        query = query + "'" + self.section.url + "' "
+
+        # Finalize query
+        query += ")"
+
+        dbconnection.modify(query)

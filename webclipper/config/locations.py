@@ -13,13 +13,13 @@ news_dir = os.path.join(root_dir, 'news\\')
 database = os.path.join(__parent_dir, 'databases\\database.db')
 
 # Temporary Folder
-temp_folder = os.path.join(__parent_dir, 'temp\\')
+temp_dir = os.path.join(root_dir, 'temp\\')
 
 # Check if temporary folder exists
-if not os.path.exists(temp_folder):
-    os.makedirs(temp_folder)
+if not os.path.exists(temp_dir):
+    os.makedirs(temp_dir)
 else:
-    utils.clear_folder(temp_folder)
+    utils.clear_folder(temp_dir)
 
 # Check if news folder exists
 if not os.path.exists(news_dir):

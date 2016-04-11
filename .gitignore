@@ -65,4 +65,7 @@ target/
 tests
 
 # Temporary folder
-/webclipper/temp
+temp
+
+# News folder
+news

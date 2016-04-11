@@ -129,7 +129,7 @@ class Section:
         source = html.tostring(content, encoding=encoding).decode(encoding)
 
         # Create a HTML file
-        filedir = locations.temp_folder + "news.html"
+        filedir = locations.temp_dir + "news.html"
         file = open(filedir, "w", encoding=encoding)
         file.write(source)
         file.close()
