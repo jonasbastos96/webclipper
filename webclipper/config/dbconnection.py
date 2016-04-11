@@ -13,7 +13,14 @@ def select(query: str()):
 
 
 def modify(query: str()):
+    result = None
     connection = sqlite3.connect(locations.database)
-    connection.execute(query)
+    cursor = connection.execute(query)
+    try:
+        result = cursor.lastrowid
+    except Exception:
+        pass
     connection.commit()
+    cursor.close()
     connection.close()
+    return result

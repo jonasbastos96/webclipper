@@ -69,8 +69,19 @@ class AuthorNotAvailable(Exception):
         # Call the base class constructor with the parameters it needs
         super(AuthorNotAvailable, self).__init__(message)
 
+
 class DateNotAvailable(Exception):
     def __init__(self, message="Can't retrieve the date from source"):
         # Call the base class constructor with the parameters it needs
         super(DateNotAvailable, self).__init__(message)
 
+
+class UnexpectedBehavior(Exception):
+    def __init__(self, message="The application had an Unexpected Behavior"):
+        # Call the base class constructor with the parameters it needs
+        super(UnexpectedBehavior, self).__init__(message)
+
+class InfoAlreadyBinded(Exception):
+    def __init__(self, message="Data is already binded."):
+        # Call the base class constructor with the parameters it needs
+        super(InfoAlreadyBinded, self).__init__(message)
